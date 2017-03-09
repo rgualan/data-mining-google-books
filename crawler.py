@@ -122,6 +122,19 @@ def parse_collection(directory):
 
     return books
 
+def parse_collection_2(directory):
+    info("Parsing collection from {}".format(directory))
+
+    for foldername in os.listdir(directory):
+        folder_path = os.path.join(directory, foldername)
+
+        book = parse_book(folder_path)
+
+        output_file = os.path.join("output/json", foldername+".json")
+        info("Saving file {}".format(output_file))
+        with open(output_file, 'w') as fp:
+            json.dump(book, fp)
+
 
 # Main:
 #page = parse_html_page('input/gap-html/gap_2X5KAAAAYAAJ/00000065.html')
@@ -139,6 +152,4 @@ def parse_collection(directory):
 #with open('output/book-pages.json', 'w') as fp:
 #    json.dump(pages, fp)
 
-books = parse_collection("input/gap-html");
-with open('output/collection.json', 'w') as outfile:
-    json.dump(books, outfile)
+parse_collection_2("input/gap-html");
