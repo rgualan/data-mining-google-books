@@ -1,0 +1,10 @@
+{
+    "title": ["title", null, []],
+    "blocks": [[".ocrx_block", {
+        "paragraphs": [[".ocr_par", {
+            "lines": [[".ocr_line", {
+               "info": [".ocr_cinfo", null, []]
+            }]]
+        }]]
+    }]]
+}

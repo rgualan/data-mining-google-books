@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+#### Customized ignores
+input/gap-html
+input/gap-html.zip
+source-references
