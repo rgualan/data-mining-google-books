@@ -112,6 +112,7 @@ def parse_html_page_simple(file_path):
 
 
 import nltk
+from nltk.corpus import stopwords
 
 def preprocessing_text(text):
 
@@ -124,6 +125,10 @@ def preprocessing_text(text):
 
 
     tokens = nltk.word_tokenize(output)  # tokenize
+
+    # stop words
+    stop = set(stopwords.words('english'))
+    tokens = [t for t in tokens if t not in stop]
 
     # stemmer
     porter = nltk.PorterStemmer()  # stemmer (Problem: iing)

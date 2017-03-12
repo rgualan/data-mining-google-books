@@ -14,15 +14,14 @@ from pprint import pprint
 
 OUTPUT_FOLDER = "output/json-text-only-2"
 
-documents = collection_reader.read_documents()
+documents,_,_ = collection_reader.read_documents()
 
 print("{} books".format(len(documents)))
 
 print("Extracting features from the training dataset using a sparse vectorizer")
 
 t0 = time()
-vectorizer = TfidfVectorizer(max_df=0.5, max_features=10000,
-                             min_df=2, stop_words='english',
+vectorizer = TfidfVectorizer(max_features=10000, min_df=0.3, max_df=0.9, stop_words='english',
                              use_idf=True)
 X = vectorizer.fit_transform(documents)
 
@@ -32,7 +31,7 @@ print()
 
 ###############################################################################
 # Do the actual clustering
-k = 10
+k = 5
 
 km = KMeans(n_clusters=k, init='k-means++', max_iter=100, n_init=1,
             verbose=True)
