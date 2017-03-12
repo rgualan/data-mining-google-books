@@ -14,14 +14,9 @@ X = vectorizer.fit_transform(corpus)
 #print("term-document matrix")
 #print(X)
 
-#print("Shape")
-#print(X.shape)
-
-#print("Feature names")
-#print(vectorizer.get_feature_names())
-
-#print("Stop words")
-#print(vectorizer.get_stop_words())
+print("Shape"); print(X.shape)
+print("Number of Feature names: "); print(len(vectorizer.get_feature_names()))
+#print("Stop words"); print(vectorizer.get_stop_words())
 
 # Obtain the most frequent words per book
 print("Top words per book")
@@ -47,8 +42,17 @@ def top_words_per_document(sparse_matrix, vectorizer, n):
 
     return top
 
+
 print("Top words per document:")
 N = 10
 for j in range(24):
     print("{} >>> {}".format(file_names[j], titles[j]))
     top_words_per_document(X.getrow(j), vectorizer, N)
+
+
+print("Plot sparse matrix")
+
+import matplotlib.pylab as plt
+import scipy.sparse as sps
+plt.spy(X, precision=0.01, markersize=1)
+plt.show()
