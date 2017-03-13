@@ -1,11 +1,9 @@
 # Based on http://scikit-learn.org/stable/auto_examples/text/document_clustering.html#sphx-glr-auto-examples-text-document-clustering-py
 
-import json
 import collection_reader
 from time import time
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import metrics
-from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
@@ -14,10 +12,9 @@ documents,_,_ = collection_reader.read_documents()
 print("{} books".format(len(documents)))
 
 print("Extracting features from the training dataset using a sparse vectorizer")
-
 t0 = time()
 #vectorizer = TfidfVectorizer(min_df=0.3, max_df=0.9, stop_words='english', use_idf=True)
-vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.8, use_idf=True)
+vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.7, use_idf=True)
 X = vectorizer.fit_transform(documents)
 
 print("done in %fs" % (time() - t0))
