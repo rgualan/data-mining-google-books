@@ -121,7 +121,7 @@ def preprocessing_text(text):
     output = re.sub(r'\s+', ' ', output)  # strip white spaces
     output = re.sub(r'[^a-zA-Z0-9 ]+', '', output)  # strip non-alphanumeric
     output = output.lower()  # normalize
-    output = re.sub(r'\b\w{1,3}\b', '', output)  # strip small words (less than a threshold)
+    output = re.sub(r'\b\w{1,2}\b', '', output)  # strip small words (less than a threshold)
 
 
     tokens = nltk.word_tokenize(output)  # tokenize

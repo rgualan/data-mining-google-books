@@ -1,23 +1,17 @@
-# Based on http://scikit-learn.org/stable/auto_examples/text/document_clustering.html#sphx-glr-auto-examples-text-document-clustering-py
-
-import json
 import collection_reader
 from time import time
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import metrics
-from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-documents,_,_ = collection_reader.read_documents()
-
+documents,_,_ = collection_reader.read_documents()  # Read data
 print("{} books".format(len(documents)))
 
 print("Extracting features from the training dataset using a sparse vectorizer")
-
 t0 = time()
 #vectorizer = TfidfVectorizer(min_df=0.3, max_df=0.9, stop_words='english', use_idf=True)
-vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.8, use_idf=True)
+vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.7, use_idf=True)
 X = vectorizer.fit_transform(documents)
 
 print("done in %fs" % (time() - t0))
@@ -28,26 +22,24 @@ print()
 # Do the actual clustering
 k = 4
 
-km = KMeans(n_clusters=k, verbose=False)
+#linkage: ward, average, complete
+# affinity: cosine, euclidean, cityblock
+ac = AgglomerativeClustering(linkage="ward", n_clusters=k, affinity="euclidean")
 
-print("Clustering sparse data with {}".format(km))
+print("Clustering sparse data with {}".format(ac))
 t0 = time()
-km.fit(X)
+ac.fit(X.todense())
 print("done in %0.3fs" % (time() - t0))
 print()
 
-print("For calculating some metrics it is necessary to have the labels. But I don't have such information")
-print("Resulting labels: {}".format(km.labels_))
-print()
-
-print("Top terms per cluster:")
-order_centroids = km.cluster_centers_.argsort()[:, ::-1]
-terms = vectorizer.get_feature_names()
-for i in range(k):
-    print("Cluster %d:" % i, end='')
-    for ind in order_centroids[i, :20]:
-        print(' %s' % terms[ind], end='')
-    print()
+# print("Top terms per cluster:")
+# order_centroids = ac.cluster_centers_.argsort()[:, ::-1]
+# terms = vectorizer.get_feature_names()
+# for i in range(k):
+#     print("Cluster %d:" % i, end='')
+#     for ind in order_centroids[i, :20]:
+#         print(' %s' % terms[ind], end='')
+#     print()
 
 
 ##########################################################
@@ -70,5 +62,5 @@ fig = plt.figure()
 plt.clf()
 ax = Axes3D(fig, elev=48, azim=134)
 plt.cla()
-ax.scatter(data3D[:, 0], data3D[:, 1], data3D[:, 2], c=km.labels_ )
+ax.scatter(data3D[:, 0], data3D[:, 1], data3D[:, 2], c=ac.labels_)
 plt.show()
