@@ -6,6 +6,7 @@ from logging import info, warning, error, debug
 from datetime import datetime
 from bs4 import BeautifulSoup
 from html2json.html2json import extract, collect
+from book_titles import BOOK_TITLES
 
 logging.basicConfig(level=logging.INFO)
 template_path = "input/template.json"
@@ -90,7 +91,6 @@ def parse_html_page_simple(file_path):
     soup = BeautifulSoup(file_data, "html.parser")
 
     page = dict()
-    page["title"] = soup.title.string
     page["numberOfPages"] = soup.find("meta", {"name": "ocr-number-of-pages"})["content"]
 
     pages = soup.find_all("div", {"class": "ocr_page"})
@@ -113,18 +113,20 @@ def parse_html_page_simple(file_path):
 
 import nltk
 from nltk.corpus import stopwords
+from nltk.tokenize import RegexpTokenizer
+
 
 def preprocessing_text(text):
-
+    output = text
     # step-wise
-    output = re.sub(r'\d+', '', text)  # strip numbers
-    output = re.sub(r'\s+', ' ', output)  # strip white spaces
-    output = re.sub(r'[^a-zA-Z0-9 ]+', '', output)  # strip non-alphanumeric
+    # output = re.sub(r'\d+', '', text)  # strip numbers
+    # output = re.sub(r'\s+', ' ', output)  # strip white spaces
+    # output = re.sub(r'[^a-zA-Z0-9 ]+', '', output)  # strip non-alphanumeric
     output = output.lower()  # normalize
     output = re.sub(r'\b\w{1,2}\b', '', output)  # strip small words (less than a threshold)
 
-
-    tokens = nltk.word_tokenize(output)  # tokenize
+    tokens = re.split(r'[^A-Z^a-z]+', output)  # tokenize based on data mining slides
+    #tokens = nltk.word_tokenize(output)  # tokenize
 
     # stop words
     stop = set(stopwords.words('english'))
@@ -134,7 +136,7 @@ def preprocessing_text(text):
     porter = nltk.PorterStemmer()  # stemmer (Problem: iing)
     try:
         tokens = [porter.stem(t) for t in tokens]
-    except Exception:
+    except:  # catch *all* exceptions
         pass
 
     # lemmanization
@@ -147,17 +149,19 @@ def preprocessing_text(text):
     return output
 
 
-def parse_book(directory):
-    info("Parsing book from {}".format(directory))
+def parse_book(folder):
+    info("Parsing book from {}".format(folder))
 
     book = dict()
-    book["directorySource"] = directory
+    book["source"] = folder
+    folder_name = os.path.splitext(os.path.basename(folder))[0]
+    book["title"] = BOOK_TITLES[folder_name]
 
     content = ""
     page_count = 0
-    for filename in os.listdir(directory):
+    for filename in os.listdir(folder):
         if filename.endswith(".html"):
-            file_path = os.path.join(directory, filename)
+            file_path = os.path.join(folder, filename)
 
             page = parse_html_page_simple(file_path)
             content = content + page["content"]
@@ -207,31 +211,29 @@ def parse_collection_2(directory):
 
         book = parse_book(folder_path)
 
-        output_file = os.path.join("output/json-text-only-2", folder_name+".json")
+        output_file = os.path.join("output/json-text-only-2", folder_name + ".json")
         info("Saving file {}".format(output_file))
         with open(output_file, 'w') as fp:
             json.dump(book, fp)
 
 
 # Page
-#page = parse_html_page('input/gap-html/gap_2X5KAAAAYAAJ/00000065.html')
-#page = parse_html_page_simple('input/gap-html/gap_2X5KAAAAYAAJ/00000065.html')
-#print(page)
-#with open('output/book-page.json', 'w') as fp:
+# page = parse_html_page('input/gap-html/gap_2X5KAAAAYAAJ/00000065.html')
+# page = parse_html_page_simple('input/gap-html/gap_2X5KAAAAYAAJ/00000065.html')
+# print(page)
+# with open('output/book-page.json', 'w') as fp:
 #    json.dump(page, fp)
 
 # Book
-#book = parse_book('input/gap-html/gap_2X5KAAAAYAAJ')
-#print(book)
-#with open('output/book.json', 'w') as fp:
+# book = parse_book('input/gap-html/gap_2X5KAAAAYAAJ')
+# print(book)
+# with open('output/book.json', 'w') as fp:
 #    json.dump(book["pages"], fp)
 
 # Collection of books
-#pages = parse_book_2('input/gap-html/gap_2X5KAAAAYAAJ')
-#print(book)
-#with open('output/book-pages.json', 'w') as fp:
+# pages = parse_book_2('input/gap-html/gap_2X5KAAAAYAAJ')
+# print(book)
+# with open('output/book-pages.json', 'w') as fp:
 #    json.dump(pages, fp)
 
 parse_collection_2("input/gap-html")
-
-
