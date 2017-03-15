@@ -17,11 +17,26 @@ def remove_metadata_collection():
             print('Droping old collection...')
             colMetadata.drop()  # Delete(drop) collection named from db
 
+    connection.close()
+
 
 def insert_metadata(metadata):
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
     colMetadata = connection[DBS_NAME][METADATA]
     colMetadata.insert(metadata)
 
+    connection.close()
 
 
+def query_metadata():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][METADATA]
+
+    find_result = collection.find()
+
+    metadata = []
+    if find_result:
+        metadata = list(find_result)
+
+    connection.close()
+    return metadata
