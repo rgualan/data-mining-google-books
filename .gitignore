@@ -92,7 +92,6 @@ ENV/
 .idea
 
 #### Customized ignores
-input/gap-html
-input/gap-html.zip
+data/
 source-references
 output/
