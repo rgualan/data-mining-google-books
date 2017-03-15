@@ -19,7 +19,7 @@ def crawl_metadata(folder_name):
     data = r.text
     soup = BeautifulSoup(data, "html.parser")
 
-    metadata_table = soup.find("table", {"id":"metadata_content_table"})
+    metadata_table = soup.find("table", {"id": "metadata_content_table"})
 
     if not metadata_table:  # metadata table was not found
         warning("Metadata table was not found for book id {}".format(book_id))
@@ -31,7 +31,7 @@ def crawl_metadata(folder_name):
         if a_label and "Citation" not in a_label.text:
             label = a_label.text
             value = table_row.find("td", {"class": "metadata_value"}).text
-            metadata.append([label, value])
+            metadata.append({'label': label, 'value': value})
 
     return metadata
 
@@ -54,5 +54,5 @@ def parse_collection(directory):
 
 
 # Main
-#mongo_handler.remove_metadata_collection()
+# mongo_handler.remove_metadata_collection()
 parse_collection("input/gap-html")
