@@ -1,25 +1,20 @@
 import os
 import json
+import mongo_handler
 from os.path import basename
 from book_titles import BOOK_TITLES
+from local_constant import *
 
-DIRECTORY = "output/json-text-only-2"
 
-
-def read_documents():
-    directory = DIRECTORY
+def read_books_one_by_one():
+    directory = EXTRACTION_FOLDER
     print("Reading collection from {}".format(directory))
 
     names = []
     titles = []
     books = []
     for file_name in os.listdir(directory):
-        #print(file_name)
         folder_path = os.path.join(directory, file_name)
-        #print(folder_path)
-
-        #print(basename(folder_path))
-        #print(os.path.splitext(basename(folder_path))[0])
 
         name = os.path.splitext(basename(folder_path))[0]
         names.append(name)
@@ -31,5 +26,31 @@ def read_documents():
 
     return books, titles, names
 
-#_,titles,_ = read_documents()
-#print(titles)
+
+def read_books_from_compiled_collection():
+    input_file = EXTRACTION_COMPILED_FILE
+    print("Reading collection from {}".format(input_file))
+
+    with open(input_file) as data_file:
+        return json.load(data_file)
+
+
+def read_books_from_mongo():
+    return mongo_handler.query_books()
+
+
+def extract_corpus(books):
+    contents = []
+    for book in books:
+        contents.append(book["content"])
+
+    return contents
+
+
+def read_books_corpus():
+    books = read_books_from_compiled_collection()
+    return extract_corpus(books)
+
+
+def read_books():
+    return read_books_from_compiled_collection()

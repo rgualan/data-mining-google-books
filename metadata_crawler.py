@@ -1,12 +1,8 @@
 import os
-import logging
 import requests
 import mongo_handler
 from logging import info, warning, error, debug
 from bs4 import BeautifulSoup
-
-logging.basicConfig(level=logging.INFO)
-template_path = "input/template.json"
 
 
 def crawl_metadata(folder_name):

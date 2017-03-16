@@ -32,4 +32,18 @@ def print_metadata():
         ))
 
 
-print_metadata()
+def append_metadata(book):
+    metadata = mongo_handler.query_metadata_entry(book["book_id"])
+
+    if not metadata:
+        return
+
+    bo = parse_book(metadata)
+
+    book["title"] = bo["title"] if "title" in bo else ""
+    book["author"] = bo["author"] if "author" in bo else ""
+    book["translator"] = bo["translator"] if "translator" in bo else ""
+
+
+if __name__ == "__main__":
+    print_metadata()

@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-documents,_,_ = collection_reader.read_documents()
+documents = collection_reader.read_books_corpus()
 
 print("{} books".format(len(documents)))
 

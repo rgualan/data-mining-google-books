@@ -2,10 +2,12 @@ import collection_reader
 from time import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster.bicluster import SpectralCoclustering
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
+import numpy as np
 
-documents,_,_ = collection_reader.read_documents()  # Read data
+documents = collection_reader.read_books_corpus()  # Read data
 print("{} books".format(len(documents)))
 
 print("Extracting features from the training dataset using a sparse vectorizer")
@@ -13,24 +15,30 @@ t0 = time()
 #vectorizer = TfidfVectorizer(min_df=0.3, max_df=0.9, stop_words='english', use_idf=True)
 vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.7, use_idf=True)
 X = vectorizer.fit_transform(documents)
-
+Xdense = X.todense()
 print("done in %fs" % (time() - t0))
 print("n_samples: {}, n_features: {}".format(X.shape[0],X.shape[1]))
 print()
 
 ###############################################################################
 # Do the actual clustering
-k = 4
+k = 5
+
+print("Clustering sparse data")
+t0 = time()
 
 #linkage: ward, average, complete
 # affinity: cosine, euclidean, cityblock
-ac = AgglomerativeClustering(linkage="ward", n_clusters=k, affinity="euclidean")
+#model = SpectralCoclustering(n_clusters=k, svd_method='arpack', random_state=0)
+model = SpectralCoclustering(n_clusters=k, svd_method='arpack', random_state=0)
+model.fit(X)
+print("done in %0.3fs \n" % (time() - t0))
 
-print("Clustering sparse data with {}".format(ac))
-t0 = time()
-ac.fit(X.todense())
-print("done in %0.3fs" % (time() - t0))
-print()
+print("Row labels: {}".format(len(np.unique(model.row_labels_))))
+print(model.row_labels_)
+print("Column labels: {}".format(len(np.unique(model.column_labels_))))
+#print(model.column_labels_)
+
 
 # print("Top terms per cluster:")
 # order_centroids = ac.cluster_centers_.argsort()[:, ::-1]
@@ -62,5 +70,5 @@ fig = plt.figure()
 plt.clf()
 ax = Axes3D(fig, elev=48, azim=134)
 plt.cla()
-ax.scatter(data3D[:, 0], data3D[:, 1], data3D[:, 2], c=ac.labels_)
+ax.scatter(data3D[:, 0], data3D[:, 1], data3D[:, 2], c=model.row_labels_)
 plt.show()

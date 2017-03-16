@@ -7,7 +7,7 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 
 
-corpus, titles, file_names = collection_reader.read_documents()  # Read the documents
+corpus = collection_reader.read_books_corpus()  # Read the documents
 
 # pipeline = Pipeline([
 #     ('vect', CountVectorizer()),
