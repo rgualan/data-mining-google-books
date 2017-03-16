@@ -40,6 +40,11 @@ def read_books_from_mongo():
 
 
 def extract_corpus(books):
+    """
+    Returns a list of strings, where each string is the content of the book
+    :param books: list of book entities
+    :return: list of contents
+    """
     contents = []
     for book in books:
         contents.append(book["content"])
@@ -53,4 +58,8 @@ def read_books_corpus():
 
 
 def read_books():
+    """
+    Reads the books entities from the most convenient source (file or Mongo)
+    :return: a list of books
+    """
     return read_books_from_compiled_collection()
