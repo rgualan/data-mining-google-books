@@ -51,6 +51,7 @@ def remove_book_2_collection():
 
 
 def insert_metadata(metadata):
+    print("Inserting metadata")
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
     collection = connection[DBS_NAME][METADATA]
     collection.insert(metadata)

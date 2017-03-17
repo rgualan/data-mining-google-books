@@ -50,7 +50,7 @@ def plot_sparse_matrix():
 
 
 if __name__ == "__main__":
-    books = collection_reader.read_books()
+    books = mongo_handler.query_books()
     corpus = collection_reader.extract_corpus(books)
 
     X, vectorizer = create_bag_of_words(corpus)

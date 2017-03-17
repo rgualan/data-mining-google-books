@@ -1,9 +1,6 @@
-import os
 import re
 import json
-import logging
 import nltk
-import metadata_handler
 import mongo_handler
 import time
 from logging import info, warning, error, debug
@@ -166,7 +163,7 @@ def parse_book(folder_path):
     book["numberOfPages"] = page_count
     book["content"] = preprocessing_text(content)
 
-    metadata_handler.append_metadata(book)
+    #metadata_handler.append_metadata(book)
 
     return book
 
