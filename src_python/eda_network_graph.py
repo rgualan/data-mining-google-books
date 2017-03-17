@@ -24,13 +24,15 @@ if __name__ == "__main__":
     for book in books:
         G.add_node(book["book_id3"])
 
+    min_matches = 1
+    thresshold = 4
+
     for link_id in links:
         b1 = link_id.split("#")[0]
         b2 = link_id.split("#")[1]
-        if links[link_id] > 1:
+        if links[link_id] > min_matches:
             G.add_edge(b1, b2, weight=links[link_id])
 
-    thresshold = 4
     elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] > thresshold]
     esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] <= thresshold]
 
