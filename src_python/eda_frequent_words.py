@@ -1,5 +1,6 @@
 import collection_reader
 import matplotlib.pylab as plt
+import mongo_handler
 from sklearn.feature_extraction.text import CountVectorizer
 
 
@@ -21,7 +22,7 @@ def max_n(row_data, row_indices, n):
     return top_values, top_indices, i
 
 
-def print_top_words_per_document(sparse_matrix, vectorizer, n):
+def calc_top_words_per_document(sparse_matrix, vectorizer, n):
     """
     Prints and returns a list of the most frequent words per document
     :param sparse_matrix: bag of words
@@ -35,9 +36,9 @@ def print_top_words_per_document(sparse_matrix, vectorizer, n):
 
     # top = [[feature_names[top_indices[j]], top_values[j]] for j in range(0, len(top_indices))]
     top = [feature_names[top_indices[j]] for j in range(len(top_indices))]
-    print(list(reversed(top)))
+    #print(list(reversed(top)))
 
-    return top
+    return list(reversed(top))
 
 
 def plot_sparse_matrix():
@@ -65,4 +66,9 @@ if __name__ == "__main__":
     for j in range(len(corpus)):
         book_title = (books[j]["title"][:75] + '...') if len(books[j]["title"]) > 75 else books[j]["title"]
         print("Book: {}".format(book_title))
-        print_top_words_per_document(X.getrow(j), vectorizer, N)
+        top_words = calc_top_words_per_document(X.getrow(j), vectorizer, N)
+        print(top_words)
+        books[j]["top10words"] = top_words
+
+    mongo_handler.remove_book_2_collection()
+    mongo_handler.insert_books_2(books)

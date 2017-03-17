@@ -8,6 +8,7 @@ MONGODB_PORT = 27017
 DBS_NAME = 'googlebooks'
 METADATA = 'book_metadata'
 BOOK = 'book'
+BOOK2 = 'book2'
 
 
 def remove_metadata_collection():
@@ -36,6 +37,19 @@ def remove_book_collection():
     connection.close()
 
 
+def remove_book_2_collection():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][BOOK2]
+
+    # Drop table (if exists)
+    if BOOK2 in connection[DBS_NAME].collection_names():  # Check if collection exists in db
+        if collection.count() > 0:  # Check if collection is not empty
+            print('Dropping old collection...')
+            collection.drop()  # Delete(drop) collection named from db
+
+    connection.close()
+
+
 def insert_metadata(metadata):
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
     collection = connection[DBS_NAME][METADATA]
@@ -47,6 +61,14 @@ def insert_metadata(metadata):
 def insert_books(books):
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
     collection = connection[DBS_NAME][BOOK]
+    collection.insert(books)
+
+    connection.close()
+
+
+def insert_books_2(books):
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][BOOK2]
     collection.insert(books)
 
     connection.close()
@@ -82,6 +104,20 @@ def query_metadata_entry(book_id):
 def query_books():
     connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
     collection = connection[DBS_NAME][BOOK]
+
+    find_result = collection.find()
+
+    books = []
+    if find_result:
+        books = list(find_result)
+
+    connection.close()
+    return books
+
+
+def query_books_2():
+    connection = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    collection = connection[DBS_NAME][BOOK2]
 
     find_result = collection.find()
 
