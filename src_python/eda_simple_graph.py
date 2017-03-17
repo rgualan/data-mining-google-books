@@ -18,17 +18,7 @@ def count_coincidences(book1, book2):
     return count
 
 
-if __name__ == "__main__":
-    books = mongo_handler.query_books_2()
-
-    # Create custom id for the graph nodes
-    print("Books:")
-    for i in range(len(books)):
-        books[i]["book_id3"] = "B" + str(i)
-        print("{}: {}".format(books[i]["book_id3"],books[i]["title"]))
-    print()
-
-    # Aggregate books by author
+def calc_books_by_author(books):
     books_by_author = dict()
     books_no_author = []
     for book in books:
@@ -39,22 +29,40 @@ if __name__ == "__main__":
                 books_by_author[book["author"]].append(book["book_id3"])
         else:
             books_no_author.append(book["book_id3"])
-    print("Books by author:")
-    for author,subgroup in books_by_author.items():
-        print("{}: {}".format(author, subgroup))
-    print("Books without author: {}".format(books_no_author))
-    print()
 
-    # Calculate the link weights
+    return books_by_author, books_no_author
+
+
+def calc_link_weights(books):
     links = dict()
     for b1 in books:
         for b2 in books:
             link_id = build_link_ids(b1, b2)
             if b1 != b2 and not (link_id[0] in links or link_id[1] in links):
                 links[link_id[0]] = count_coincidences(b1, b2)
+    return links
 
-    # Calculate max link weight
-    max_weight = max(links.values())
+
+if __name__ == "__main__":
+    books = mongo_handler.query_books_2()
+
+    # Create custom id for the graph nodes
+    print("Books:")
+    for i in range(len(books)):
+        books[i]["book_id3"] = "" + str(i)
+        print("{}: {}".format(books[i]["book_id3"], books[i]["title"]))
+    print()
+
+    # Aggregate books by author
+    books_by_author, books_no_author = calc_books_by_author(books)
+    print("Books by author:")
+    for author, subgroup in books_by_author.items():
+        print("{}: {}".format(author, subgroup))
+    print("Books without author: {}".format(books_no_author))
+    print()
+
+    links = calc_link_weights(books)  # Calculate the link weights
+    max_weight = max(links.values())  # Calculate max link weight
     print("Max weight: {}".format(max_weight))
 
     # Print links
@@ -82,9 +90,9 @@ if __name__ == "__main__":
     # nodes
     nx.draw_networkx_nodes(G, pos,
                            nodelist=books_no_author,
-                           node_size=500, node_color='b')
-    colors = ['#8dd3c7', '#ffffb3','#bebada','#fb8072','#80b1d3',
-              '#fdb462', '#b3de69','#fccde5', '#d9d9d9']
+                           node_size=500, node_color='#d9d9d9')
+    colors = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3',
+              '#fdb462', '#b3de69', '#fccde5', '#d9d9d9']
     i = 0
     for subgroup in books_by_author.values():
         nx.draw_networkx_nodes(G, pos,
