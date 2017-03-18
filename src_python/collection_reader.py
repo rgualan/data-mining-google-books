@@ -53,7 +53,7 @@ def extract_corpus(books):
 
 
 def read_books_corpus():
-    books = read_books_from_compiled_collection()
+    books = read_books_from_mongo()
     return extract_corpus(books)
 
 
