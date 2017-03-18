@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     ###############################################################################
     # Do the actual clustering
-    k = 6
+    k = 5
 
     # linkage: ward, average, complete
     # affinity: cosine, euclidean, cityblock

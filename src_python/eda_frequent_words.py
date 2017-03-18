@@ -59,6 +59,11 @@ if __name__ == "__main__":
     print("Shape {} x {}".format(X.shape[0], X.shape[1]))
     print("Number of Feature names: {}".format(len(vectorizer.get_feature_names())))
 
+    # from sklearn.metrics.pairwise import cosine_similarity
+    # dist = 1 - cosine_similarity(X)
+    # print(dist)
+    # exit()
+
     # Obtain the most frequent words per book
     N = 10
     print("Top {} words per document:".format(N))
