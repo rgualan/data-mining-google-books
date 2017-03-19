@@ -22,23 +22,35 @@ def dendogram1():
         # p=40,  # show only the last p merged clusters
         show_leaf_counts=True,  # numbers in brackets are counts, others idx
         leaf_rotation=60.,
-        leaf_font_size=8.,
+        leaf_font_size=8,
         show_contracted=True,  # to get a distribution impression in truncated branches
     )
     plt.title('Hierarchical Clustering Dendrogram')
     plt.show()
 
 
-def dendogram2():
+def dendogram2(labels='titles'):
+    """
+    Plots a dendogram
+    :param labels: {'titles', 'ids'}
+    :return:
+    """
+
     # Read data
     books = collection_reader.read_books_from_mongo();
     documents = collection_reader.extract_corpus(books)
 
-    # Titles
-    titles = [
-        "(" + book["book_id3"] + ") " +
-        book["title"][:25] + ("..." if len(book["title"]) > 25 else "")
-        for book in books]
+    # Labels
+    titles = []
+    if labels == 'titles':
+        titles = [
+            "(" + book["book_id3"] + ") " +
+            book["title"][:25] + ("..." if len(book["title"]) > 25 else "")
+            for book in books]
+    else:
+        titles = [
+            "(" + book["book_id3"] + ") " for book in books]
+
 
     # Create term-document representation
     vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.7, use_idf=True)
@@ -68,4 +80,4 @@ def dendogram2():
 
 
 if __name__ == "__main__":
-    dendogram2()
+    dendogram2('ids')
