@@ -22,7 +22,7 @@ print()
 
 ###############################################################################
 # Do the actual clustering
-k = 5
+k = 4
 
 print("Clustering sparse data")
 t0 = time()

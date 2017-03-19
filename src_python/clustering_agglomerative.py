@@ -1,6 +1,6 @@
 import collection_reader
 import plot_util
-import decomposition_util
+import preprocessing_util
 from time import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import AgglomerativeClustering
@@ -15,23 +15,13 @@ if __name__ == "__main__":
     print()
 
     # Create term-document representation
-    print("Extracting features from the training dataset using a sparse vectorizer")
-    t0 = time()
-    # vectorizer = TfidfVectorizer(min_df=0.3, max_df=0.9, stop_words='english', use_idf=True)
-    vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.9, stop_words='english', use_idf=True)
-    X = vectorizer.fit_transform(documents)
+    X = preprocessing_util.convert_to_term_document(documents, min_df=0.1, max_df=0.9)
 
     # SVD
-    X = decomposition_util.apply_svd(X, min(X.shape))
+    X = preprocessing_util.apply_svd(X, min(X.shape))
 
     # Cosine similarity matrix
     dist = 1 - cosine_similarity(X)
-
-    print("done in %.2fs" % (time() - t0))
-    print("n_samples: {}, n_features: {}".format(X.shape[0], X.shape[1]))
-    print()
-
-    print(X)
 
     ###############################################################################
     # Do the actual clustering

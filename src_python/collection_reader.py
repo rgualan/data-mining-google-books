@@ -2,7 +2,6 @@ import os
 import json
 import mongo_handler
 from os.path import basename
-from book_titles import BOOK_TITLES
 from local_constant import *
 
 
@@ -11,20 +10,18 @@ def read_books_one_by_one():
     print("Reading collection from {}".format(directory))
 
     names = []
-    titles = []
     books = []
     for file_name in os.listdir(directory):
         folder_path = os.path.join(directory, file_name)
 
         name = os.path.splitext(basename(folder_path))[0]
         names.append(name)
-        titles.append(BOOK_TITLES[name])
 
         with open(folder_path) as data_file:
             book = json.load(data_file)
             books.append(book["content"])
 
-    return books, titles, names
+    return books, names
 
 
 def read_books_from_compiled_collection():

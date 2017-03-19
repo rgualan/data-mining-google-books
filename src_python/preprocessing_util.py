@@ -3,6 +3,24 @@ import numpy as np
 from time import time
 from sklearn.decomposition import TruncatedSVD
 from sklearn.utils.extmath import randomized_svd
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+
+def convert_to_term_document(documents, min_df=0.1, max_df=0.9 ):
+
+    # Create term-document representation
+    print("Extracting features from the training dataset using a sparse vectorizer")
+    t0 = time()
+
+    vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.9, stop_words='english', use_idf=True)
+    X = vectorizer.fit_transform(documents)
+
+    print("done in %.2fs" % (time() - t0))
+    print("n_samples: {}, n_features: {}".format(X.shape[0], X.shape[1]))
+    print("some features: {}".format(vectorizer.get_feature_names()[:5]))
+    print()
+
+    return X
 
 
 def apply_svd(X, n_components=None):
