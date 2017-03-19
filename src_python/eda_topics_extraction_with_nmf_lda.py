@@ -6,7 +6,7 @@ from time import time
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
 from sklearn.datasets import fetch_20newsgroups
-from collection_reader import read_documents
+import collection_reader
 
 #n_samples = 2000
 n_samples = 24
@@ -30,7 +30,7 @@ def print_top_words(model, feature_names, n_top_words):
 
 print("Loading dataset...")
 t0 = time()
-dataset,_,_ = read_documents()
+dataset = collection_reader.read_books_corpus()
 print("done in %0.3fs." % (time() - t0))
 
 # Use tf-idf features for NMF.
