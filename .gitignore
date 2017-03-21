@@ -95,3 +95,6 @@ ENV/
 data/
 source-references
 output/
+.Rproj.user
+src_R/.R*
+src_R/*.Rproj
