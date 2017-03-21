@@ -11,7 +11,7 @@ def create_2d_plot_for_sparse_matrix(X, labels):
     plt.show()
 
 
-def create_3d_plot_for_sparse_matrix(X, labels, block=True):
+def create_3d_plot_for_sparse_matrix(X, labels, block=True, show=True):
     """
     First apply PCA to obtain 3 main components
     then plots the resulting model in e dimension
@@ -34,4 +34,5 @@ def create_3d_plot_for_sparse_matrix(X, labels, block=True):
     # ax.set_ylabel('Principal component 2')
     # ax.set_zlabel('Principal component 3')
 
-    plt.show(block=block)
+    if show:
+        plt.show(block=block)
