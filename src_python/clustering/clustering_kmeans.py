@@ -17,7 +17,7 @@ if __name__ == "__main__":
     X = preprocessing_util.convert_to_term_document(documents, min_df=0.1, max_df=0.9)
 
     # SVD
-    X = preprocessing_util.apply_svd(X, min(X.shape))
+    X = preprocessing_util.apply_svd(X, min(X.shape)-5)
 
     ###############################################################################
     # Do the actual clustering
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     the_metrics = []
-    for i in range(10):
+    for i in range(1):
         km = KMeans(n_clusters=k, verbose=False)
         #print("Clustering sparse data with {}".format(km))
         #t0 = time()
