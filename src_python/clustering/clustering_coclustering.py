@@ -1,11 +1,12 @@
-import collection_reader
 from time import time
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.cluster.bicluster import SpectralCoclustering
-from sklearn.decomposition import PCA
+
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.decomposition import PCA
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from util import collection_reader
 
 documents = collection_reader.read_books_corpus()  # Read data
 print("{} books".format(len(documents)))

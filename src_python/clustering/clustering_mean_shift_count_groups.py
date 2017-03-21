@@ -1,9 +1,7 @@
 import numpy as np
-import collection_reader
-import preprocessing_util
-import plot_util
 from sklearn.cluster import MeanShift, estimate_bandwidth
 
+from util import preprocessing_util, collection_reader
 
 if __name__ == "__main__":
     # Read data

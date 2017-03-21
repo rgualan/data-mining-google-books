@@ -1,11 +1,12 @@
-import collection_reader
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import ward, average, complete, dendrogram
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from util import collection_reader
 
-def custom_dendogram(label_type='titles', linkage_method='ward'):
+
+def custom_dendrogram(label_type='titles', linkage_method='ward'):
     """
     Plots a dendogram
     uses cosine similarity
@@ -46,6 +47,10 @@ def custom_dendogram(label_type='titles', linkage_method='ward'):
     else:
         raise Exception("Parameter linkage_method is not recognized!")
 
+    # Calculate metrics
+
+
+    # Plot dendrogram
     plt.subplots(figsize=(5, 5))  # set size
     ax = dendrogram(linkage_matrix, orientation="right", labels=labels)
 
@@ -64,6 +69,6 @@ def custom_dendogram(label_type='titles', linkage_method='ward'):
 
 
 if __name__ == "__main__":
-    custom_dendogram('ids', 'ward')
-    custom_dendogram('ids', 'average')
-    custom_dendogram('ids', 'complete')
+    custom_dendrogram('ids', 'ward')
+    custom_dendrogram('ids', 'average')
+    custom_dendrogram('ids', 'complete')
