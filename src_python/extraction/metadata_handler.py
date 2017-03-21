@@ -1,7 +1,9 @@
+from logging import info, warning
+
 import requests
-import mongo_handler
-from logging import info, warning, error, debug
 from bs4 import BeautifulSoup
+
+from util import mongo_handler
 
 
 def crawl_metadata(book):

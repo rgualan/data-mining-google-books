@@ -1,11 +1,8 @@
-import collection_reader
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.datasets import fetch_20newsgroups
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
-from sklearn.decomposition import PCA, TruncatedSVD, NMF, SparsePCA
-from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
 
+from util import collection_reader
 
 corpus = collection_reader.read_books_corpus()  # Read the documents
 

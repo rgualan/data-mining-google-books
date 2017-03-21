@@ -1,14 +1,15 @@
 # Ref: http://scikit-learn.org/stable/auto_examples/applications/topics_extraction_with_nmf_lda.html#sphx-glr-auto-examples-applications-topics-extraction-with-nmf-lda-py
 
 from __future__ import print_function
+
 from time import time
 
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
-from sklearn.datasets import fetch_20newsgroups
-import collection_reader
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 
-#n_samples = 2000
+from util import collection_reader
+
+
 n_samples = 24
 n_features = 10000
 n_topics = 5
@@ -78,5 +79,3 @@ print("done in %0.3fs." % (time() - t0))
 print("\nTopics in LDA model:")
 tf_feature_names = tf_vectorizer.get_feature_names()
 print_top_words(lda, tf_feature_names, n_top_words)
-
-

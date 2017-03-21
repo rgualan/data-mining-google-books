@@ -6,13 +6,12 @@ from sklearn.utils.extmath import randomized_svd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def convert_to_term_document(documents, min_df=0.1, max_df=0.9 ):
-
+def convert_to_term_document(documents, min_df=0.1, max_df=0.9):
     # Create term-document representation
     print("Extracting features from the training dataset using a sparse vectorizer")
     t0 = time()
 
-    vectorizer = TfidfVectorizer(min_df=0.1, max_df=0.9, stop_words='english', use_idf=True)
+    vectorizer = TfidfVectorizer(min_df=min_df, max_df=max_df, stop_words='english', use_idf=True)
     X = vectorizer.fit_transform(documents)
 
     print("done in %.2fs" % (time() - t0))

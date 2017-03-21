@@ -1,7 +1,7 @@
-import collection_reader
 import matplotlib.pylab as plt
-import mongo_handler
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
+from util import mongo_handler, collection_reader
 
 
 def create_bag_of_words(document):
@@ -17,6 +17,7 @@ def max_n(row_data, row_indices, n):
     """
     i = row_data.argsort()[-n:]
     # i = row_data.argpartition(-n)[-n:]
+    i = i[::-1]
     top_values = row_data[i]
     top_indices = row_indices[i]  # do the sparse indices matter?
     return top_values, top_indices, i
@@ -41,7 +42,7 @@ def calc_top_words_per_document(sparse_matrix, vectorizer, n):
     return list(reversed(top))
 
 
-def plot_sparse_matrix():
+def plot_sparse_matrix(X):
     # It did not work probably because the y size is to small (24)
     # compared to the x size  (370491)
     print("Plot sparse matrix")
@@ -49,7 +50,7 @@ def plot_sparse_matrix():
     plt.show()
 
 
-if __name__ == "__main__":
+def discover_top_frequent_words():
     books = mongo_handler.query_books()
     corpus = collection_reader.extract_corpus(books)
 
@@ -59,21 +60,55 @@ if __name__ == "__main__":
     print("Shape {} x {}".format(X.shape[0], X.shape[1]))
     print("Number of Feature names: {}".format(len(vectorizer.get_feature_names())))
 
-    # from sklearn.metrics.pairwise import cosine_similarity
-    # dist = 1 - cosine_similarity(X)
-    # print(dist)
-    # exit()
-
     # Obtain the most frequent words per book
     N = 10
     print("Top {} words per document:".format(N))
 
     for j in range(len(corpus)):
         book_title = (books[j]["title"][:75] + '...') if len(books[j]["title"]) > 75 else books[j]["title"]
-        print("Book: {}".format(book_title))
+        print("Book {}: {}".format(books[j]['book_id3'], book_title))
         top_words = calc_top_words_per_document(X.getrow(j), vectorizer, N)
         print(top_words)
         books[j]["top10words"] = top_words
 
     mongo_handler.remove_book_2_collection()
     mongo_handler.insert_books_2(books)
+
+
+def plot_top_words():
+    books = mongo_handler.query_books()
+    corpus = collection_reader.extract_corpus(books)
+    n = 50
+
+    X, vectorizer = create_bag_of_words(corpus)
+
+    top_values, top_indices, i = max_n(X.data, X.indices, n)
+
+    feature_names = vectorizer.get_feature_names()
+
+    top_terms = [feature_names[top_indices[j]] for j in range(len(top_indices))]
+
+    # print(i)
+    # print(top_indices)
+    # print(top_values)
+    # print(top_terms)
+
+    index = np.arange(len(top_values))
+    bar_width = 0.8
+    plt.bar(index, top_values, width=bar_width,
+                     alpha=0.4,
+                     color='b',
+                     label='Top words')
+    plt.xlabel('Terms')
+    plt.ylabel('Frequency')
+    plt.title('Most frequent words')
+    plt.xticks(index, top_terms, rotation=90)
+    plt.tight_layout()
+    plt.show()
+
+
+if __name__ == "__main__":
+    discover_top_frequent_words()
+    #plot_top_words()
+
+

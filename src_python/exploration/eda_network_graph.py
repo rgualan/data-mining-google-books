@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-import src_python.mongo_handler as mongo_handler
-import metadata_handler
+
+import util.mongo_handler as mongo_handler
+from extraction import metadata_handler
 
 colors = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3',
           '#fdb462', '#b3de69', '#fccde5', '#d9d9d9']

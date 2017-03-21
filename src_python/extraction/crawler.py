@@ -1,12 +1,14 @@
-import re
 import json
-import nltk
-import mongo_handler
+import re
 import time
-from logging import info, warning, error, debug
+from logging import debug
+
+import nltk
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
-from local_constant import *
+
+from config.local_constant import *
+from util import mongo_handler
 
 
 def parse_html_page_hierarchical(file_path):
@@ -163,7 +165,7 @@ def parse_book(folder_path):
     book["numberOfPages"] = page_count
     book["content"] = preprocessing_text(content)
 
-    #metadata_handler.append_metadata(book)
+    # metadata_handler.append_metadata(book)
 
     return book
 

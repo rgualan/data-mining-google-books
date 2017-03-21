@@ -1,8 +1,8 @@
-import os
 import json
-import mongo_handler
 from os.path import basename
-from local_constant import *
+
+from config.local_constant import *
+from util import mongo_handler
 
 
 def read_books_one_by_one():
